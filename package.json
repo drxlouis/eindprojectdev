@@ -1,0 +1,26 @@
+{
+  "name": "dev2les8",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --ext ts --exec ts-node ./server/app.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bootstrap": "^5.3.5",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1",
+    "path": "^0.12.7",
+    "routes": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/express-ejs-layouts": "^2.5.4",
+    "nodemon": "^3.1.10",
+    "typescript": "^5.8.3"
+  }
+}
