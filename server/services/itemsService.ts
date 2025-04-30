@@ -6,6 +6,7 @@ export interface Items {
     description: string;
     price: number;
     category: string;
+    image: string;
 }
 
 export async function getAllItems(): Promise<Items[]> {
