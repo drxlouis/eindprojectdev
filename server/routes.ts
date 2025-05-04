@@ -10,7 +10,7 @@ router.get("/", (req: Request, res: Response): void => {
   res.render("landing", { title: "Home", display: "Welcome to Home" });
 });
 
-// Catalog Page
+// Catalog Page (nakijken (brak))
 router.get("/catalog", async (req: Request, res: Response): Promise<void> => {
   try {
     const items = await getAllItems();
