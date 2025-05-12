@@ -54,6 +54,11 @@
         background-color: #c10006;
         color: white;
       }
+      .card-img-top {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
     </style>
   </head>
   <body>
@@ -65,20 +70,18 @@
               <button class="btn category-pill active me-2" data-category="all">
                 All Items
               </button>
-              <button class="btn category-pill me-2" data-category="burger">
+              <button class="btn category-pill me-2" data-category="burgers">
                 Burgers
               </button>
-              <button class="btn category-pill me-2" data-category="chicken">
-                Chicken
+              <button class="btn category-pill me-2" data-category="desserts">
+                Desserts
               </button>
-              <button class="btn category-pill me-2" data-category="sides">
-                Sides
               </button>
               <button class="btn category-pill me-2" data-category="drinks">
                 Drinks
               </button>
-              <button class="btn category-pill me-2" data-category="dessert">
-                Desserts
+              <button class="btn category-pill me-2" data-category="specials">
+                Specials
               </button>
             </div>
           </div>
@@ -100,7 +103,7 @@
                   </div>
                   <img
                     src="<%= item.image %>"
-                    class="card-img-top"
+                    class="card-img-top "
                     alt="<%= item.item %>"
                   />
                   <div class="card-body d-flex flex-column">
@@ -145,15 +148,11 @@
               <div class="card-footer">
                 <div class="d-flex justify-content-between mb-3">
                   <span>Subtotal:</span>
-                  <span id="subtotal">$0.00</span>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                  <span>Tax:</span>
-                  <span id="tax">$0.00</span>
+                  <span id="subtotal">€0.00</span>
                 </div>
                 <div class="d-flex justify-content-between fw-bold mb-3">
                   <span>Total:</span>
-                  <span id="total">$0.00</span>
+                  <span id="total">€0.00</span>
                 </div>
                 <button class="btn btn-red w-100 checkout-btn">
                   <i class="bi bi-bag-check me-2"></i>
