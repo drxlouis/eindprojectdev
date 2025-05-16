@@ -32,8 +32,9 @@ router.get("/catalog", async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-
-
+router.get("/account", (req: Request, res: Response): void => {
+  res.render("account", { title: "Account", display: "Account Page" });
+});
 
 // 404 Page
 router.use((req: Request, res: Response): void => {

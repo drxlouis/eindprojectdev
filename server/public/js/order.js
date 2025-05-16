@@ -177,6 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Checkout button listener
+    
     const checkoutButton = document.querySelector('.checkout-btn');
     if (checkoutButton) {
       checkoutButton.addEventListener('click', function() {
