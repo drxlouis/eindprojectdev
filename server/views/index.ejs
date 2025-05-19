@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= typeof display !== 'undefined' ? display : title %></title>
   </head>
+  <style>
+    .icon-special {
+      display: hidden;
+    }
+
+    .icon-burgers {
+      display: hidden;
+    }
+  </style>
   <body>
     <main>
       <div class="container">
@@ -14,9 +23,12 @@
               <button class="btn category-pill active me-2" data-category="all">
                 All Items
               </button>
-              <button class="btn category-pill me-2" data-category="burgers">
+                <button class="btn category-pill me-2" data-category="burgers"
+                onclick="ShowIconBurgers()">
+                <i id="icon-burgers" class="bi bi-star d-none">
+                </i>
                 Burgers
-              </button>
+                </button>
               <button class="btn category-pill me-2" data-category="desserts">
                 Desserts
               </button>
@@ -25,14 +37,48 @@
                 Drinks
               </button>
               <button class="btn category-pill me-2" data-category="specials">
-                Specials
+                Specials 
+              </button>
+              <button class="btn category-pill me-2" data-category="sides">
+          <i class="bi bi-cart3 me-2"></i>
               </button>
             </div>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-4 order-1 order-md-2 mb-4 pb-5">
+            <div class="card sticky-md-top" style="top: 20px">
+              <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">
+                  <i class="bi bi-cart3 me-2"></i>
+                  Your Order
+                </h5>
+              </div>
+              <div class="card-body">
+                <div id="cart-items">
+                  <p class="text-center text-muted">Your cart is empty</p>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="d-flex justify-content-between mb-3">
+                  <span>Subtotal:</span>
+                  <span id="subtotal">€0.00</span>
+                </div>
+                <div class="d-flex justify-content-between fw-bold mb-3">
+                  <span>Total:</span>
+                  <span id="total">€0.00</span>
+                </div>
+                <button class="btn btn-red w-100 checkout-btn">
+                  <i class="bi bi-bag-check me-2"></i>
+                  Checkout Now
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Menu Items -->
+          <div class="col-md-8 order-2 order-md-1">
             <div class="row">
               <% items.forEach(item => { %>
               <div
@@ -72,37 +118,6 @@
                 </div>
               </div>
               <% }) %>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="card sticky-top" style="top: 20px">
-              <div class="card-header bg-dark text-white">
-                <h5 class="mb-0">
-                  <i class="bi bi-cart3 me-2"></i>
-                  Your Order
-                </h5>
-              </div>
-              <div class="card-body">
-                <div id="cart-items">
-                  <p class="text-center text-muted">Your cart is empty</p>
-
-                </div>
-              </div>
-              <div class="card-footer">
-                <div class="d-flex justify-content-between mb-3">
-                  <span>Subtotal:</span>
-                  <span id="subtotal">€0.00</span>
-                </div>
-                <div class="d-flex justify-content-between fw-bold mb-3">
-                  <span>Total:</span>
-                  <span id="total">€0.00</span>
-                </div>
-                <button class="btn btn-red w-100 checkout-btn">
-                  <i class="bi bi-bag-check me-2"></i>
-                  Checkout Now
-                </button>
-              </div>
             </div>
           </div>
         </div>

@@ -1,27 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Burger Restaurant</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-          <div class="card">
-            <div class="card-header">
-              <h2>My Account</h2>
-            </div>
-            <div class="card-body">
-              <!-- Account content goes here -->
-              <p>Welcome to your account page!</p>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      .sidebar {
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        background-color: #343a40;
+        width: 100px;
+        min-width: 100px;
+        max-width: 100px;
+      }
+      
+      .sidebar-nav {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding-top: 1rem;
+      }
+
+      .nav-link {
+        padding: 1rem 0;
+        text-align: center;
+      }
+
+      .nav-link i {
+        color: var(--mcd-yellow) !important;
+        font-size: 2rem;
+      }
+
+      .main-content {
+        flex: 1;
+        min-height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+          <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="#" data-page="profile">
+                  <i class="bi bi-person-circle"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-page="edit">
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-page="settings">
+                  <i class="bi bi-gear"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="col main-content p-4">
+          <!-- Profile Page -->
+          <div class="page-content" id="profile-page">
+            <h2>My Profile</h2>
+            <div class="card">
+              <div class="card-body">
+                <h3>Welcome,   user.name   </h3>
+                <p>Email:   user.email   </p>
+              </div>
             </div>
           </div>
-        </div>
+
+          <!-- Edit Profile Page -->
+          <div class="page-content d-none" id="edit-page">
+            <h2>Edit Items</h2>
+
+            <% if (items.length > 0) { %>
+              <div class="row">
+                <% items.forEach(item => { %>
+                  <div class="col-md-4 col-lg-4 mb-4 col-12 menu-item">
+                    <div class="card card-food h-100">
+                      <img src="<%= item.image %>" class="card-img-top" alt="<%= item.name %>" />
+                      <div class="card-body">
+                        <h5 class="card-title"><%= item.name %></h5>
+                        <p class="card-text">Price: $<%= item.price %></p>
+                        <p class="card-text">Description: <%= item.description %></p>
+                        <button class="btn btn-yellow" data-item-id="<%= item.id %>">Edit</button>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <div class="alert alert-warning" role="alert">
+                No items available for editing.
+              </div>
+            <% } %>
+            <h3>Add New Item</h3>
+            <div class="card">
+              <div class="card-body">
+                <form>
+                  <div class="mb-3">
+                    <label for="itemName" class="form-label">Item Name</label>
+                    <input type="text" class="form-control" id="itemName" required />
+                  </div>
+                  <div class="mb-3">
+                    <label for="itemPrice" class="form-label">Item Price</label>
+                    <input type="number" class="form-control" id="itemPrice" required />
+                  </div>
+                  <div class="mb-3">
+                    <label for="itemDescription" class="form-label">Item Description</label>
+                    <textarea class="form-control" id="itemDescription" rows="3"></textarea>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <h3>Delete Item</h3>
+          </div>
+
+          <!-- Settings Page -->
+          <div class="page-content d-none" id="settings-page">
+            <h2>Settings</h2>
+            <div class="card">
+              <div class="card-body">
+                <h3>Account Settings</h3>
+                <!-- Add settings options here -->
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
     </div>
-</body>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page-content');
+
+        navLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Remove active class from all links
+            navLinks.forEach(l => l.classList.remove('active'));
+            
+            // Add active class to clicked link
+            link.classList.add('active');
+            
+            // Hide all pages
+            pages.forEach(page => page.classList.add('d-none'));
+            
+            // Show selected page
+            const pageId = `${link.dataset.page}-page`;
+            document.getElementById(pageId).classList.remove('d-none');
+          });
+        });
+      });
+    </script>
+  </body>
 </html>

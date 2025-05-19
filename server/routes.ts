@@ -32,8 +32,14 @@ router.get("/catalog", async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-router.get("/account", (req: Request, res: Response): void => {
-  res.render("account", { title: "Account", display: "Account Page" });
+router.get("/account", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const items = await getAllItems();
+    res.render("account", { title: "Account", display: "Account Page", items });
+  } catch (error) {
+    console.error("Error fetching items:", error);
+    res.status(500).render("500", { title: "Internal Server Error" });
+  }
 });
 
 // 404 Page
