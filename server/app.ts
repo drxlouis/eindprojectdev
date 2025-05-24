@@ -18,10 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/", routes);
 
-app.use((req, res, next) => {
-  res.locals.display = "Default Title";
-  next();
-});
 
 // Server starten
 app.listen(PORT, (): void => {

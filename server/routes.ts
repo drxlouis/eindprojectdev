@@ -5,46 +5,41 @@ const router = express.Router();
 
 router.use(express.urlencoded({ extended: true }));
 
-// // Home Page
-// router.get("/", (req: Request, res: Response): void => {
-
-//   res.render("landing", { title: "Home", display: "Welcome to Home" });
-// });
-
+// Home Page
 router.get("/", async (req: Request, res: Response): Promise<void> => {
   try {
     const items = await getAllItems();
-    res.render("landing", { title: "Home", display: "Welcome!", items });
+    res.render("landing", { items });
   } catch (error) {
     console.error("Error fetching items on landing-page:", error);
-    res.status(500).render("500", { title: "Internal Server Error" });
+    res.status(500).render("500");
   }
 });
 
-// Catalog Page (nakijken (brak))
+// Catalog Page
 router.get("/catalog", async (req: Request, res: Response): Promise<void> => {
   try {
     const items = await getAllItems();
-    res.render("index", { title: "Catalog", display: "Catalog Page", items });
+    res.render("index", { items });
   } catch (error) {
     console.error("Error fetching items:", error);
-    res.status(500).render("500", { title: "Internal Server Error" });
+    res.status(500).render("500");
   }
 });
 
 router.get("/account", async (req: Request, res: Response): Promise<void> => {
   try {
     const items = await getAllItems();
-    res.render("account", { title: "Account", display: "Account Page", items });
+    res.render("account", { items });
   } catch (error) {
     console.error("Error fetching items:", error);
-    res.status(500).render("500", { title: "Internal Server Error" });
+    res.status(500).render("500");
   }
 });
 
 // 404 Page
 router.use((req: Request, res: Response): void => {
-  res.status(404).render("404", { title: "Page Not Found" });
+  res.status(404).render("404");
 });
 
 export default router;

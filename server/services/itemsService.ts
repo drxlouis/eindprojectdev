@@ -9,6 +9,8 @@ export interface Items {
     image: string;
 }
 
+//products
+
 export async function getAllItems(): Promise<Items[]> {
     const data: Items[] = await sql`SELECT * FROM items`;
     return data;
