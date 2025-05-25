@@ -14,7 +14,8 @@ app.set("layout", "layouts/main");
 
 app.use(express.static(path.join(__dirname, "/public")));
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // Add this line to parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // For form data
 
 app.use("/", routes);
 

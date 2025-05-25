@@ -1,5 +1,4 @@
-
-    <style>
+<style>
       .sidebar {
         height: 100vh;
         position: sticky;
@@ -31,7 +30,45 @@
         flex: 1;
         min-height: 100vh;
       }
+
+      .popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgb(255, 255, 255);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
     </style>
+
+
+
+  <div class="popup">
+    <div class="card" style="min-width: 350px;">
+      <div class="card-body">
+        <h2 class="mb-4 text-center">Login</h2>
+        <form id="loginForm" onsubmit="return ProcessLogin(event)">
+          <div class="mb-3 popup_name">
+            <label for="popupNaam" class="form-label">Naam</label>
+            <input type="text" class="form-control" id="popupNaam" name="naam" required>
+          </div>
+          <div class="mb-3 popup_ww">
+            <label for="popupWachtwoord" class="form-label">Wachtwoord</label>
+            <input type="password" class="form-control" id="popupWachtwoord" name="wachtwoord" required>
+          </div>
+          <div class="d-grid">
+            <button class="btn btn-yellow" type="submit">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
     <div class="container-fluid">
       <div class="row">
         <!-- Sidebar Navigation -->
@@ -79,12 +116,18 @@
                 <% items.forEach(item => { %>
                   <div class="col-md-4 col-lg-4 mb-4 col-12 menu-item">
                     <div class="card card-food h-100">
-                      <img src="<%= item.image %>" class="card-img-top" alt="<%= item.name %>" />
+                      <img src="<%= item.image %>" class="card-img-top" alt="<%= item.item %>" />
                       <div class="card-body">
-                        <h5 class="card-title"><%= item.name %></h5>
+                        <h5 class="card-title"><%= item.item %></h5>
                         <p class="card-text">Price: $<%= item.price %></p>
                         <p class="card-text">Description: <%= item.description %></p>
-                        <button class="btn btn-yellow" data-item-id="<%= item.id %>">Edit</button>
+                        <button class="btn btn-yellow edit-item-btn" 
+                                data-item-id="<%= item.id %>" 
+                                data-item-name="<%= item.item %>" 
+                                data-item-price="<%= item.price %>" 
+                                data-item-description="<%= item.description %>">
+                          Edit
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -131,7 +174,58 @@
       </div>
     </div>
 
+    <div class="popup d-none" id="editItemPopup">
+      <div class="card" style="min-width: 350px;">
+        <div class="card-body">
+          <h2 class="mb-4 text-center">Edit Item</h2>
+          <form id="editItemForm">
+            <div class="mb-3">
+              <label for="editItemName" class="form-label">Item Name</label>
+              <input type="text" class="form-control" id="editItemName" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label for="editItemPrice" class="form-label">Item Price</label>
+              <input type="number" class="form-control" id="editItemPrice" name="price" required>
+            </div>
+            <div class="mb-3">
+              <label for="editItemDescription" class="form-label">Item Description</label>
+              <textarea class="form-control" id="editItemDescription" name="description" rows="3"></textarea>
+            </div>
+            <div class="d-grid">
+              <button class="btn btn-yellow" type="submit">Save Changes</button>
+            </div>
+            <div class="d-grid mt-2">
+              <button class="btn btn-red" type="button" id="cancelEditItem">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <script>
+      // Pass credentials from server (set these in your route handler)
+      const LOGIN_NAAM = "<%= LOGIN_NAAM %>";
+      const LOGIN_WACHTWOORD = "<%= LOGIN_WACHTWOORD %>";
+      console.log("LOGIN_NAAM from server:", LOGIN_NAAM);
+      console.log("LOGIN_WACHTWOORD from server:", LOGIN_WACHTWOORD);
+
+
+      function ProcessLogin(event) {
+        event.preventDefault();
+        const naam = document.querySelector('.popup_name input').value;
+        const wachtwoord = document.querySelector('.popup_ww input').value;
+
+
+
+        if (naam == LOGIN_NAAM && wachtwoord == LOGIN_WACHTWOORD) {
+          document.querySelector('.popup').style.display = 'none';
+        } else {
+          alert('Please enter both name and password.');
+        }
+        return false;
+      }
+
+      // JavaScript to handle sidebar navigation and page switching
       document.addEventListener('DOMContentLoaded', function() {
         const navLinks = document.querySelectorAll('.nav-link');
         const pages = document.querySelectorAll('.page-content');
@@ -155,5 +249,55 @@
           });
         });
       });
-    </script>
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.edit-item-btn');
+    const editPopup = document.getElementById('editItemPopup');
+    const editForm = document.getElementById('editItemForm');
+    const cancelEditButton = document.getElementById('cancelEditItem');
+
+    // Animate popup in/out
+    function showPopup() {
+      editPopup.classList.remove('d-none');
+      editPopup.style.opacity = 0;
+      editPopup.style.transition = 'opacity 0.3s';
+      setTimeout(() => {
+        editPopup.style.opacity = 1;
+      }, 10);
+    }
+    function hidePopup() {
+      editPopup.style.opacity = 0;
+      setTimeout(() => {
+        editPopup.classList.add('d-none');
+      }, 300);
+    }
+
+    // Populate the popup with item data when "Edit" is clicked
+    editButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const itemName = button.getAttribute('data-item-name');
+        const itemPrice = button.getAttribute('data-item-price');
+        const itemDescription = button.getAttribute('data-item-description');
+
+        // Populate the form fields
+        document.getElementById('editItemName').value = itemName;
+        document.getElementById('editItemPrice').value = itemPrice;
+        document.getElementById('editItemDescription').value = itemDescription;
+
+        showPopup();
+      });
+    });
+
+    // Close the popup when "Cancel" is clicked
+    cancelEditButton.addEventListener('click', hidePopup);
+
+    // Handle form submission (UI only, no backend)
+    editForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      // Optionally, update UI here
+      hidePopup();
+    });
+  });
+</script>
 
