@@ -9,6 +9,7 @@ const PORT: number = parseInt(<string>process.env.PORT, 10) || 3000;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+
 app.use(expressLayouts);
 app.set("layout", "layouts/main");
 
