@@ -19,7 +19,8 @@
     "express-ejs-layouts": "^2.5.1",
     "path": "^0.12.7",
     "postgres": "^3.4.5",
-    "routes": "^2.1.0"
+    "routes": "^2.1.0",
+    "vercel": "^43.1.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
