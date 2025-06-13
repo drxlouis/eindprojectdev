@@ -15,3 +15,11 @@ export async function getAllItems(): Promise<Items[]> {
     return data;
 }
 
+export async function addItems(items: Items): Promise<Items> {
+  const [newItem] = await sql<Items[]>`
+    INSERT INTO items (item, description, price, category, image)
+    VALUES (${items.item}, ${items.description}, ${items.price}, ${items.category}, ${items.image})
+    RETURNING *
+  `;
+  return newItem;
+}

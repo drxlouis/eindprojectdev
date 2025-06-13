@@ -101,16 +101,39 @@
             <h2>My Profile</h2>
             <div class="card">
               <div class="card-body">
-                <h3>Welcome,   user.name   </h3>
-                <p>Email:   user.email   </p>
+                <h3>Welcome</h3>
               </div>
             </div>
           </div>
 
           <!-- Edit Profile Page -->
-          <div class="page-content d-none" id="edit-page">
-            <h2>Edit Items</h2>
+      <div class="page-content d-none" id="edit-page">
+      <h1 class="mb-4">Add New Item</h1>
+      <form action="/add" method="POST">
+        <div class="mb-3">
+          <label for="itemName" class="form-label">Item Name</label>
+          <input type="text" class="form-control" id="itemName" name="item" required />
+        </div>
+        <div class="mb-3">
+          <label for="itemDescription" class="form-label">Description</label>
+          <textarea class="form-control" id="itemDescription" name="description" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="itemPrice" class="form-label">Price</label>
+          <input type="number" class="form-control" id="itemPrice" name="price" required />
+        </div>
+        <div class="mb-3">
+          <label for="itemCategory" class="form-label">Category</label>
+          <input type="text" class="form-control" id="itemCategory" name="category" required />
+        </div>
+        <div class="mb-3">
+          <label for="itemImage" class="form-label">Image URL</label>
+          <input type="text" class="form-control" id="itemImage" name="image" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Add Item</button>
+      </form>
 
+            <h2>Edit items</h2>
             <% if (items.length > 0) { %>
               <div class="row">
                 <% items.forEach(item => { %>
@@ -138,25 +161,6 @@
                 No items available for editing.
               </div>
             <% } %>
-            <h3>Add New Item</h3>
-            <div class="card">
-              <div class="card-body">
-                <form>
-                  <div class="mb-3">
-                    <label for="itemName" class="form-label">Item Name</label>
-                    <input type="text" class="form-control" id="itemName" required />
-                  </div>
-                  <div class="mb-3">
-                    <label for="itemPrice" class="form-label">Item Price</label>
-                    <input type="number" class="form-control" id="itemPrice" required />
-                  </div>
-                  <div class="mb-3">
-                    <label for="itemDescription" class="form-label">Item Description</label>
-                    <textarea class="form-control" id="itemDescription" rows="3"></textarea>
-                  </div>
-                </form>
-              </div>
-            </div>
             <h3>Delete Item</h3>
           </div>
 
@@ -249,6 +253,12 @@
           });
         });
       });
+
+      // Add this script to your page
+document.querySelector('form').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevents the page reload
+  // Handle form data here (e.g., send with fetch or AJAX)
+});
 
 
   document.addEventListener('DOMContentLoaded', function () {

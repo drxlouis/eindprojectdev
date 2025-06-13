@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { Items, getAllItems } from "./services/itemsService";
+import { Items, getAllItems, addItems } from "./services/itemsService";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -45,6 +45,39 @@ router.get("/account", async (req: Request, res: Response): Promise<void> => {
     res.status(500).render("500");
   }
 });
+
+router.post("/account", async (req: Request, res: Response) => {
+  const { item, description, price, category, image } = req.body;
+  // Assign a temporary id (e.g., 0); the real id should be set in addItems or the database
+  const newItem: Items = { id: 0, item, description, price, category, image };
+  try {
+    await addItems(newItem);
+    res.redirect("/");
+  } catch (error) {
+    console.error('Error adding item:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+router.get("/add", (req: Request, res: Response): void => {
+  res.render("add", { title: "Voeg Product Toe" });
+});
+
+router.post("/add", async (req: Request, res: Response) => {
+  const { item, description, price, category, image } = req.body;
+  // Assign a temporary id (e.g., 0); the real id should be set in addItems or the database
+  const newItem: Items = { id: 0, item, description, price, category, image };
+  try {
+    await addItems(newItem);
+    res.redirect("/");
+  } catch (error) {
+    console.error('Error adding item:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 
 
 
