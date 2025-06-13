@@ -21,7 +21,12 @@ app.use(express.urlencoded({ extended: true })); // For form data
 app.use("/", routes);
 
 
-// Server starten
-app.listen(PORT, (): void => {
-  console.log(`Server draait op http://localhost:${PORT}`);
-});
+// Export the app for serverless environments (like Vercel)
+export default app;
+
+// Only start the server if not in a serverless environment
+if (require.main === module) {
+  app.listen(PORT, (): void => {
+    console.log(`Server draait op http://localhost:${PORT}`);
+  });
+}
