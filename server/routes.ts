@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { Items, getAllItems, addItems } from "./services/itemsService";
 import { Recensies, getAllRecensies, addRecensie } from "./services/recensiesService";
+import { Orders, getAllOrders, addOrder } from "./services/ordersService";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -47,8 +48,10 @@ router.get("/catalog", async (req: Request, res: Response): Promise<void> => {
 router.get("/account", async (req: Request, res: Response): Promise<void> => {
   try {
     const items = await getAllItems();
+    const orders = await getAllOrders();
     res.render("account", {
       items,
+      orders,
       LOGIN_NAAM: process.env.LOGIN_NAAM,
       LOGIN_WACHTWOORD: process.env.LOGIN_WACHTWOORD,
     });
@@ -70,6 +73,7 @@ router.post("/account", async (req: Request, res: Response) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 router.post("/reviews", async (req: Request, res: Response) => {
   const { title, text, author, image, rating } = req.body;
