@@ -329,13 +329,6 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-
-            if(response.ok) {
-                alert('Item added successfully!');
-                location.reload();
-            } else {
-                alert('Failed to add item.');
-            }
         });
 
         // --- Navigation Logic ---
