@@ -23,3 +23,22 @@ export async function addRecensie(recensie: Recensies): Promise<Recensies> {
     `;
     return newRecensie;
 }
+
+// add a fuction that edits the recensies
+export async function editRecensie(recensie: Recensies): Promise<Recensies> {
+    const [updatedRecensie] = await sql<Recensies[]>`
+        UPDATE recensies
+        SET title = ${recensie.title}, text = ${recensie.text}, author = ${recensie.author}, image = ${recensie.image}, rating = ${recensie.rating}
+        WHERE id = ${recensie.id}
+        RETURNING *
+    `;
+    return updatedRecensie;
+}
+
+// add a fuction that deletes the recensies
+export async function deleteRecensie(id: number): Promise<void> {
+    await sql`
+        DELETE FROM recensies
+        WHERE id = ${id}
+    `;
+}

@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { Items, getAllItems, addItems } from "./services/itemsService";
-import { Recensies, getAllRecensies, addRecensie } from "./services/recensiesService";
+import { Recensies, getAllRecensies, addRecensie, editRecensie, deleteRecensie } from "./services/recensiesService";
 import { Orders, getAllOrders, addOrder } from "./services/ordersService";
 import dotenv from "dotenv";
 dotenv.config();
