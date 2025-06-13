@@ -130,56 +130,33 @@
 
         <!-- Edit Orders Section -->
         <section id="edit-orders" class="d-none">
-          
-        <h2>Edit orders</h2>
-        <hr/>
-        <% if (orders.length > 0) { %>
-          <div class="row">
-            <% orders.forEach(order => { %>
-              <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card h-100">
-                  <div class="card-body d-flex flex-column">
-                    <h5 class="card-title"><%= order.order_nr %></h5>
-                    <p class="card-text">Price: $<%= order.price %></p>
-                    <p class="card-text flex-grow-1"><%= order.products %></p>
-                    <p class="card-text flex-grow-1"><%= order.status %></p>
-                    <button class="btn btn-yellow edit-item-btn mt-auto" data-item-id="<%= order.id %>" data-item-name="<%= order.order_nr %>" data-item-price="<%= order.price %>" data-item-description="<%= order.products %>" data-item-image="<%= order.image %>">Edit</button>
+          <h2>Orders</h2>
+          <hr/>
+          <% if (orders.length > 0) { %>
+            <div class="row">
+              <% orders.forEach(order => { %>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                  <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">Order #<%= order.order_nr %></h5>
+                      <p class="card-text">Price: $<%= order.price %></p>
+                      <p class="card-text">Products: <%= order.products %></p>
+                      <p class="card-text">Status: <span class="badge bg-secondary"><%= order.status %></span></p>
+                      <button class="btn btn-yellow edit-order-btn mt-auto" data-order-id="<%= order.id %>" data-order-nr="<%= order.order_nr %>" data-order-price="<%= order.price %>" data-order-products="<%= order.products %>" data-order-status="<%= order.status %>">Edit Order</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            <% }) %>
-          </div>
-        <% } else { %>
-          <p>No items available to edit.</p>
-        <% } %>
-
-                <h2>Orders</h2>
-        <hr/>
-        <% if (items.length > 0) { %>
-          <div class="row">
-            <% items.forEach(item => { %>
-              <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card h-100">
-                  <img src="<%= item.image %>" class="card-img-top" style="height: 200px; object-fit: cover;" alt="<%= item.item %>" />
-                  <div class="card-body d-flex flex-column">
-                    <h5 class="card-title"><%= item.item %></h5>
-                    <p class="card-text">Price: $<%= item.price %></p>
-                    <p class="card-text flex-grow-1"><%= item.description %></p>
-                    <button class="btn btn-yellow edit-item-btn mt-auto" data-item-id="<%= item.id %>" data-item-name="<%= item.item %>" data-item-price="<%= item.price %>" data-item-description="<%= item.description %>" data-item-image="<%= item.image %>">Edit</button>
-                  </div>
-                </div>
-              </div>
-            <% }) %>
-          </div>
-        <% } else { %>
-          <p>No items available to edit.</p>
-        <% } %>
-
+              <% }) %>
+            </div>
+          <% } else { %>
+            <p>No orders available.</p>
+          <% } %>
         </section>
       </div>
     </div>
   </div>
 
+  <!-- Edit Item Popup -->
   <div class="popup d-none" id="editItemPopup">
     <div class="card" style="min-width: 350px;">
       <div class="card-body">
@@ -188,9 +165,35 @@
           <div class="mb-3"><label for="editItemName" class="form-label">Item Name</label><input type="text" class="form-control" id="editItemName" name="name" required></div>
           <div class="mb-3"><label for="editItemPrice" class="form-label">Price</label><input type="number" step="0.01" class="form-control" id="editItemPrice" name="price" required></div>
           <div class="mb-3"><label for="editItemDescription" class="form-label">Description</label><textarea class="form-control" id="editItemDescription" name="description" rows="3" required></textarea></div>
-          <div class="mb-3"><label for="editItemImage" class="form-label">Note</label><input type="url" class="form-control" id="editItemImage" name="image" required /></div>
+          <div class="mb-3"><label for="editItemImage" class="form-label">Image URL</label><input type="url" class="form-control" id="editItemImage" name="image" required /></div>
           <div class="d-grid"><button class="btn btn-yellow" type="submit">Save Changes</button></div>
           <div class="d-grid mt-2"><button class="btn btn-secondary" type="button" id="cancelEditItem">Cancel</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Order Popup -->
+  <div class="popup d-none" id="editOrderPopup">
+    <div class="card" style="min-width: 350px;">
+      <div class="card-body">
+        <h2 class="mb-4 text-center">Edit Order</h2>
+        <form id="editOrderForm">
+          <div class="mb-3"><label for="editOrderNr" class="form-label">Order Number</label><input type="text" class="form-control" id="editOrderNr" name="order_nr" readonly></div>
+          <div class="mb-3"><label for="editOrderPrice" class="form-label">Price</label><input type="number" step="0.01" class="form-control" id="editOrderPrice" name="price" required></div>
+          <div class="mb-3"><label for="editOrderProducts" class="form-label">Products</label><textarea class="form-control" id="editOrderProducts" name="products" rows="3" required></textarea></div>
+          <div class="mb-3">
+            <label for="editOrderStatus" class="form-label">Status</label>
+            <select class="form-control" id="editOrderStatus" name="status" required>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div class="d-grid"><button class="btn btn-yellow" type="submit">Save Changes</button></div>
+          <div class="d-grid mt-2"><button class="btn btn-secondary" type="button" id="cancelEditOrder">Cancel</button></div>
         </form>
       </div>
     </div>
@@ -221,47 +224,97 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        const editPopup = document.getElementById('editItemPopup');
-        const editForm = document.getElementById('editItemForm');
+        const editItemPopup = document.getElementById('editItemPopup');
+        const editItemForm = document.getElementById('editItemForm');
+        const editOrderPopup = document.getElementById('editOrderPopup');
+        const editOrderForm = document.getElementById('editOrderForm');
         
         // --- Popup Blur Logic ---
-        function showEditPopup() {
-            editPopup.classList.remove('d-none');
+        function showEditItemPopup() {
+            editItemPopup.classList.remove('d-none');
             mainContainer.classList.add('is-blurred');
         }
-        function hideEditPopup() {
-            editPopup.classList.add('d-none');
+        function hideEditItemPopup() {
+            editItemPopup.classList.add('d-none');
+            mainContainer.classList.remove('is-blurred');
+        }
+
+        function showEditOrderPopup() {
+            editOrderPopup.classList.remove('d-none');
+            mainContainer.classList.add('is-blurred');
+        }
+        function hideEditOrderPopup() {
+            editOrderPopup.classList.add('d-none');
             mainContainer.classList.remove('is-blurred');
         }
 
         // --- Edit Item Logic ---
         document.querySelectorAll('.edit-item-btn').forEach(button => {
             button.addEventListener('click', () => {
-                editForm.setAttribute('data-current-item-id', button.dataset.itemId);
+                editItemForm.setAttribute('data-current-item-id', button.dataset.itemId);
                 document.getElementById('editItemName').value = button.dataset.itemName;
                 document.getElementById('editItemPrice').value = button.dataset.itemPrice;
                 document.getElementById('editItemDescription').value = button.dataset.itemDescription;
                 document.getElementById('editItemImage').value = button.dataset.itemImage;
-                showEditPopup();
+                showEditItemPopup();
             });
         });
 
-        document.getElementById('cancelEditItem').addEventListener('click', hideEditPopup);
+        document.getElementById('cancelEditItem').addEventListener('click', hideEditItemPopup);
 
-        editForm.addEventListener('submit', async function (event) {
+        editItemForm.addEventListener('submit', async function (event) {
             event.preventDefault();
-            const itemId = editForm.getAttribute('data-current-item-id');
-            const data = Object.fromEntries(new FormData(editForm));
+            const itemId = editItemForm.getAttribute('data-current-item-id');
+            const data = Object.fromEntries(new FormData(editItemForm)); // Converts form data to an object
 
             const response = await fetch(`/item/${itemId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data) // Ensure data is sent as JSON
             });
+
             if (response.ok) {
                 location.reload();
             } else {
                 alert('Failed to update item.');
+            }
+        });
+
+        // --- Edit Order Logic ---
+        document.querySelectorAll('.edit-order-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                editOrderForm.setAttribute('data-current-order-id', button.dataset.orderId);
+                document.getElementById('editOrderNr').value = button.dataset.orderNr;
+                document.getElementById('editOrderPrice').value = button.dataset.orderPrice;
+                document.getElementById('editOrderProducts').value = button.dataset.orderProducts;
+                document.getElementById('editOrderStatus').value = button.dataset.orderStatus;
+                showEditOrderPopup();
+            });
+        });
+
+        document.getElementById('cancelEditOrder').addEventListener('click', hideEditOrderPopup);
+
+        editOrderForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const orderId = editOrderForm.getAttribute('data-current-order-id');
+            const data = Object.fromEntries(new FormData(editOrderForm)); // Converts form data to an object
+
+            // Ensure all fields are included in the request body
+            if (!data.order_nr || !data.price || !data.products || !data.status) {
+                alert('Missing required fields.');
+                return;
+            }
+
+            const response = await fetch(`/orders/${orderId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Failed to update order.');
             }
         });
 
@@ -285,6 +338,7 @@
             }
         });
 
+        // --- Navigation Logic ---
         const editItemsLink = document.getElementById("editItemsLink");
         const addItemLink = document.getElementById("addItemLink");
         const editOrdersLink = document.getElementById("editOrdersLink");

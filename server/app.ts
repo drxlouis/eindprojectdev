@@ -17,6 +17,8 @@ app.set("layout", "layouts/main");
 
 app.use(express.static(path.join(__dirname, "/public")));
 
+// Add this middleware to parse JSON request bodies
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/", routes);

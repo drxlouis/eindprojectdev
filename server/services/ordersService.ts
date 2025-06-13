@@ -23,3 +23,25 @@ export async function addOrder(order: Orders): Promise<Orders> {
   `;
   return newOrder;
 }
+
+export async function editOrder(id: number, updatedOrder: Partial<Orders>): Promise<Orders> {
+  const [updated] = await sql<Orders[]>`
+    UPDATE orders
+    SET 
+      order_nr = ${updatedOrder.order_nr || null}, 
+      price = ${updatedOrder.price || null}, 
+      products = ${updatedOrder.products || null}, 
+      status = ${updatedOrder.status || null}
+    WHERE id = ${id}
+    RETURNING *
+  `;
+  return updated;
+}
+
+export async function deleteOrder(id: number): Promise<void> {
+    await sql`
+        DELETE FROM orders
+        WHERE id = ${id}
+    `;
+}
+
