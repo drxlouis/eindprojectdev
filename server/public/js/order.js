@@ -179,24 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
-    // Checkout button listener
-
-    const checkoutButton = document.querySelector(".checkout-btn");
-    if (checkoutButton) {
-      checkoutButton.addEventListener("click", function () {
-        if (cart.count > 0) {
-          alert(
-            "Proceeding to checkout with " +
-              cart.count +
-              " items. Your total is €" +
-              cart.calculateSubtotal().toFixed(2)
-          );
-          // Here you would normally redirect to checkout page or process the order
-        } else {
-          alert("Your cart is empty");
-        }
-      });
-    }
   }
 
   // Filter menu items by category
@@ -231,3 +213,24 @@ document.addEventListener("DOMContentLoaded", function () {
   // Make cart globally accessible
   window.foodCart = cart;
 });
+
+
+function Checkout() {
+  // This function handles checkout logic
+  if (foodCart.count > 0) {
+    alert(
+      "Your order has been placed. You have ordered " +
+        foodCart.count +
+        " items. Your total is €" +
+        foodCart.calculateSubtotal().toFixed(2)
+    );
+
+    // Clear the cart after checkout
+    foodCart.clearCart();
+
+    // Optionally, redirect to a confirmation page or process the order
+    // window.location.href = "/confirmation";
+  } else {
+    alert("Your cart is empty");
+  }
+}

@@ -1,313 +1,212 @@
-<style>
-      .sidebar {
-        height: 100vh;
-        position: sticky;
-        top: 0;
-        background-color: #343a40;
-        width: 100px;
-        min-width: 100px;
-        max-width: 100px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+      :root {
+        --mcd-yellow: #ffc72c;
+        --mcd-red: #db0007;
+      }
+      .btn-yellow { background-color: var(--mcd-yellow); border-color: var(--mcd-yellow); color: #333; }
+      .btn-red { background-color: var(--mcd-red); border-color: var(--mcd-red); color: white; }
+      body { background-color: #f8f9fa; }
+
+      /* New class to blur the background */
+      .is-blurred {
+        filter: blur(4px);
+        pointer-events: none;
+        transition: filter 0.3s ease-out;
       }
       
-      .sidebar-nav {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        padding-top: 1rem;
-      }
-
-      .nav-link {
-        padding: 1rem 0;
-        text-align: center;
-      }
-
-      .nav-link i {
-        color: var(--mcd-yellow) !important;
-        font-size: 2rem;
-      }
-
       .main-content {
-        flex: 1;
-        min-height: 100vh;
+        transition: filter 0.3s ease-out;
       }
 
+      /* Popup styles */
       .popup {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgb(255, 255, 255);
+        background-color: rgba(0, 0, 0, 0.5);
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
         z-index: 1000;
+        transition: opacity 0.3s ease;
       }
     </style>
+</head>
+<body>
 
-
-
-  <div class="popup">
+  <div class="popup" id="loginPopup">
     <div class="card" style="min-width: 350px;">
       <div class="card-body">
         <h2 class="mb-4 text-center">Login</h2>
         <form id="loginForm" onsubmit="return ProcessLogin(event)">
-          <div class="mb-3 popup_name">
-            <label for="popupNaam" class="form-label">Naam</label>
-            <input type="text" class="form-control" id="popupNaam" name="naam" required>
-          </div>
-          <div class="mb-3 popup_ww">
-            <label for="popupWachtwoord" class="form-label">Wachtwoord</label>
-            <input type="password" class="form-control" id="popupWachtwoord" name="wachtwoord" required>
-          </div>
-          <div class="d-grid">
-            <button class="btn btn-yellow" type="submit">Login</button>
-          </div>
+          <div class="mb-3"><label for="popupNaam" class="form-label">Naam</label><input type="text" class="form-control" id="popupNaam" required></div>
+          <div class="mb-3"><label for="popupWachtwoord" class="form-label">Wachtwoord</label><input type="password" class="form-control" id="popupWachtwoord" required></div>
+          <div class="d-grid"><button class="btn btn-yellow" type="submit">Login</button></div>
         </form>
       </div>
     </div>
   </div>
 
+  <div id="main-app-container">
     <div class="container-fluid">
-      <div class="row">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-          <nav class="sidebar-nav">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link active" href="#" data-page="profile">
-                  <i class="bi bi-person-circle"></i>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#" data-page="edit">
-                  <i class="bi bi-pencil-square"></i>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#" data-page="settings">
-                  <i class="bi bi-gear"></i>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="col main-content p-4">
-          <!-- Profile Page -->
-          <div class="page-content" id="profile-page">
-            <h2>My Profile</h2>
-            <div class="card">
-              <div class="card-body">
-                <h3>Welcome</h3>
-              </div>
-            </div>
-          </div>
-
-          <!-- Edit Profile Page -->
-      <div class="page-content d-none" id="edit-page">
-      <h1 class="mb-4">Add New Item</h1>
-      <form action="/add" method="POST">
-        <div class="mb-3">
-          <label for="itemName" class="form-label">Item Name</label>
-          <input type="text" class="form-control" id="itemName" name="item" required />
-        </div>
-        <div class="mb-3">
-          <label for="itemDescription" class="form-label">Description</label>
-          <textarea class="form-control" id="itemDescription" name="description" rows="3" required></textarea>
-        </div>
-        <div class="mb-3">
-          <label for="itemPrice" class="form-label">Price</label>
-          <input type="number" class="form-control" id="itemPrice" name="price" required />
-        </div>
-        <div class="mb-3">
-          <label for="itemCategory" class="form-label">Category</label>
-          <input type="text" class="form-control" id="itemCategory" name="category" required />
-        </div>
-        <div class="mb-3">
-          <label for="itemImage" class="form-label">Image URL</label>
-          <input type="text" class="form-control" id="itemImage" name="image" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Add Item</button>
-      </form>
-
-            <h2>Edit items</h2>
-            <% if (items.length > 0) { %>
-              <div class="row">
-                <% items.forEach(item => { %>
-                  <div class="col-md-4 col-lg-4 mb-4 col-12 menu-item">
-                    <div class="card card-food h-100">
-                      <img src="<%= item.image %>" class="card-img-top" alt="<%= item.item %>" />
-                      <div class="card-body">
-                        <h5 class="card-title"><%= item.item %></h5>
-                        <p class="card-text">Price: $<%= item.price %></p>
-                        <p class="card-text">Description: <%= item.description %></p>
-                        <button class="btn btn-yellow edit-item-btn" 
-                                data-item-id="<%= item.id %>" 
-                                data-item-name="<%= item.item %>" 
-                                data-item-price="<%= item.price %>" 
-                                data-item-description="<%= item.description %>">
-                          Edit
-                        </button>
-                      </div>
-                    </div>
+      <main class="main-content p-4">
+        
+        <h2>Edit Items</h2>
+        <hr/>
+        <% if (items.length > 0) { %>
+          <div class="row">
+            <% items.forEach(item => { %>
+              <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100">
+                  <img src="<%= item.image %>" class="card-img-top" style="height: 200px; object-fit: cover;" alt="<%= item.item %>" />
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title"><%= item.item %></h5>
+                    <p class="card-text">Price: $<%= item.price %></p>
+                    <p class="card-text flex-grow-1"><%= item.description %></p>
+                    <button class="btn btn-yellow edit-item-btn mt-auto" data-item-id="<%= item.id %>" data-item-name="<%= item.item %>" data-item-price="<%= item.price %>" data-item-description="<%= item.description %>" data-item-image="<%= item.image %>">Edit</button>
                   </div>
-                <% }) %>
+                </div>
               </div>
-            <% } else { %>
-              <div class="alert alert-warning" role="alert">
-                No items available for editing.
-              </div>
-            <% } %>
-            <h3>Delete Item</h3>
+            <% }) %>
           </div>
+        <% } else { %>
+          <p>No items available to edit.</p>
+        <% } %>
 
-          <!-- Settings Page -->
-          <div class="page-content d-none" id="settings-page">
-            <h2>Settings</h2>
-            <div class="card">
-              <div class="card-body">
-                <h3>Account Settings</h3>
-                <!-- Add settings options here -->
-              </div>
-            </div>
+        <h2 class="mt-5">Add New Item</h2>
+        <hr/>
+        <div class="card">
+          <div class="card-body">
+            <form id="addItemForm">
+              <div class="mb-3"><label for="itemName" class="form-label">Item Name</label><input type="text" class="form-control" id="itemName" name="name" required /></div>
+              <div class="mb-3"><label for="itemPrice" class="form-label">Price</label><input type="number" step="0.01" class="form-control" id="itemPrice" name="price" required /></div>
+              <div class="mb-3"><label for="itemDescription" class="form-label">Description</label><textarea class="form-control" id="itemDescription" name="description" rows="3" required></textarea></div>
+              <div class="mb-3"><label for="itemImage" class="form-label">Image URL</label><input type="url" class="form-control" id="itemImage" name="image" required /></div>
+              <button class="btn btn-yellow" type="submit">Add Item</button>
+            </form>
           </div>
-        </main>
-      </div>
-    </div>
-
-    <div class="popup d-none" id="editItemPopup">
-      <div class="card" style="min-width: 350px;">
-        <div class="card-body">
-          <h2 class="mb-4 text-center">Edit Item</h2>
-          <form id="editItemForm">
-            <div class="mb-3">
-              <label for="editItemName" class="form-label">Item Name</label>
-              <input type="text" class="form-control" id="editItemName" name="name" required>
-            </div>
-            <div class="mb-3">
-              <label for="editItemPrice" class="form-label">Item Price</label>
-              <input type="number" class="form-control" id="editItemPrice" name="price" required>
-            </div>
-            <div class="mb-3">
-              <label for="editItemDescription" class="form-label">Item Description</label>
-              <textarea class="form-control" id="editItemDescription" name="description" rows="3"></textarea>
-            </div>
-            <div class="d-grid">
-              <button class="btn btn-yellow" type="submit">Save Changes</button>
-            </div>
-            <div class="d-grid mt-2">
-              <button class="btn btn-red" type="button" id="cancelEditItem">Cancel</button>
-            </div>
-          </form>
         </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="popup d-none" id="editItemPopup">
+    <div class="card" style="min-width: 350px;">
+      <div class="card-body">
+        <h2 class="mb-4 text-center">Edit Item</h2>
+        <form id="editItemForm">
+          <div class="mb-3"><label for="editItemName" class="form-label">Item Name</label><input type="text" class="form-control" id="editItemName" name="name" required></div>
+          <div class="mb-3"><label for="editItemPrice" class="form-label">Price</label><input type="number" step="0.01" class="form-control" id="editItemPrice" name="price" required></div>
+          <div class="mb-3"><label for="editItemDescription" class="form-label">Description</label><textarea class="form-control" id="editItemDescription" name="description" rows="3" required></textarea></div>
+          <div class="mb-3"><label for="editItemImage" class="form-label">Image URL</label><input type="url" class="form-control" id="editItemImage" name="image" required /></div>
+          <div class="d-grid"><button class="btn btn-yellow" type="submit">Save Changes</button></div>
+          <div class="d-grid mt-2"><button class="btn btn-secondary" type="button" id="cancelEditItem">Cancel</button></div>
+        </form>
       </div>
     </div>
-
-    <script>
-      // Pass credentials from server (set these in your route handler)
-      const LOGIN_NAAM = "<%= LOGIN_NAAM %>";
-      const LOGIN_WACHTWOORD = "<%= LOGIN_WACHTWOORD %>";
-      console.log("LOGIN_NAAM from server:", LOGIN_NAAM);
-      console.log("LOGIN_WACHTWOORD from server:", LOGIN_WACHTWOORD);
+  </div>
 
 
-      function ProcessLogin(event) {
+
+<script>
+    const LOGIN_NAAM = "<%= LOGIN_NAAM %>";
+    const LOGIN_WACHTWOORD = "<%= LOGIN_WACHTWOORD %>";
+    const mainContainer = document.getElementById('main-app-container');
+
+    // Initially hide main container and blur it for the login
+    mainContainer.style.display = 'none';
+    mainContainer.classList.add('is-blurred');
+
+    function ProcessLogin(event) {
         event.preventDefault();
-        const naam = document.querySelector('.popup_name input').value;
-        const wachtwoord = document.querySelector('.popup_ww input').value;
+        const naam = document.getElementById('popupNaam').value;
+        const wachtwoord = document.getElementById('popupWachtwoord').value;
 
-
-
-        if (naam == LOGIN_NAAM && wachtwoord == LOGIN_WACHTWOORD) {
-          document.querySelector('.popup').style.display = 'none';
+        if (naam === LOGIN_NAAM && wachtwoord === LOGIN_WACHTWOORD) {
+            document.getElementById('loginPopup').style.display = 'none';
+            mainContainer.style.display = 'block';
+            mainContainer.classList.remove('is-blurred'); // Un-blur on login
         } else {
-          alert('Please enter both name and password.');
+            alert('Invalid credentials.');
         }
         return false;
-      }
+    }
 
-      // JavaScript to handle sidebar navigation and page switching
-      document.addEventListener('DOMContentLoaded', function() {
-        const navLinks = document.querySelectorAll('.nav-link');
-        const pages = document.querySelectorAll('.page-content');
+    document.addEventListener('DOMContentLoaded', function () {
+        const editPopup = document.getElementById('editItemPopup');
+        const editForm = document.getElementById('editItemForm');
+        
+        // --- Popup Blur Logic ---
+        function showEditPopup() {
+            editPopup.classList.remove('d-none');
+            mainContainer.classList.add('is-blurred');
+        }
+        function hideEditPopup() {
+            editPopup.classList.add('d-none');
+            mainContainer.classList.remove('is-blurred');
+        }
 
-        navLinks.forEach(link => {
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            // Remove active class from all links
-            navLinks.forEach(l => l.classList.remove('active'));
-            
-            // Add active class to clicked link
-            link.classList.add('active');
-            
-            // Hide all pages
-            pages.forEach(page => page.classList.add('d-none'));
-            
-            // Show selected page
-            const pageId = `${link.dataset.page}-page`;
-            document.getElementById(pageId).classList.remove('d-none');
-          });
+        // --- Edit Item Logic ---
+        document.querySelectorAll('.edit-item-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                editForm.setAttribute('data-current-item-id', button.dataset.itemId);
+                document.getElementById('editItemName').value = button.dataset.itemName;
+                document.getElementById('editItemPrice').value = button.dataset.itemPrice;
+                document.getElementById('editItemDescription').value = button.dataset.itemDescription;
+                document.getElementById('editItemImage').value = button.dataset.itemImage;
+                showEditPopup();
+            });
         });
-      });
 
-      // Add this script to your page
-document.querySelector('form').addEventListener('submit', function(event) {
-  event.preventDefault(); // Prevents the page reload
-  // Handle form data here (e.g., send with fetch or AJAX)
-});
+        document.getElementById('cancelEditItem').addEventListener('click', hideEditPopup);
 
+        editForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const itemId = editForm.getAttribute('data-current-item-id');
+            const data = Object.fromEntries(new FormData(editForm));
 
-  document.addEventListener('DOMContentLoaded', function () {
-    const editButtons = document.querySelectorAll('.edit-item-btn');
-    const editPopup = document.getElementById('editItemPopup');
-    const editForm = document.getElementById('editItemForm');
-    const cancelEditButton = document.getElementById('cancelEditItem');
+            const response = await fetch(`/item/${itemId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Failed to update item.');
+            }
+        });
 
-    // Animate popup in/out
-    function showPopup() {
-      editPopup.classList.remove('d-none');
-      editPopup.style.opacity = 0;
-      editPopup.style.transition = 'opacity 0.3s';
-      setTimeout(() => {
-        editPopup.style.opacity = 1;
-      }, 10);
-    }
-    function hidePopup() {
-      editPopup.style.opacity = 0;
-      setTimeout(() => {
-        editPopup.classList.add('d-none');
-      }, 300);
-    }
+        // --- Add New Item Logic ---
+        const addItemForm = document.getElementById('addItemForm');
+        addItemForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const data = Object.fromEntries(new FormData(addItemForm));
 
-    // Populate the popup with item data when "Edit" is clicked
-    editButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const itemName = button.getAttribute('data-item-name');
-        const itemPrice = button.getAttribute('data-item-price');
-        const itemDescription = button.getAttribute('data-item-description');
+            const response = await fetch('/item', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
-        // Populate the form fields
-        document.getElementById('editItemName').value = itemName;
-        document.getElementById('editItemPrice').value = itemPrice;
-        document.getElementById('editItemDescription').value = itemDescription;
-
-        showPopup();
-      });
+            if(response.ok) {
+                alert('Item added successfully!');
+                location.reload();
+            } else {
+                alert('Failed to add item.');
+            }
+        });
     });
-
-    // Close the popup when "Cancel" is clicked
-    cancelEditButton.addEventListener('click', hidePopup);
-
-    // Handle form submission (UI only, no backend)
-    editForm.addEventListener('submit', function (event) {
-      event.preventDefault();
-      // Optionally, update UI here
-      hidePopup();
-    });
-  });
 </script>
-
+</body>
+</html>
