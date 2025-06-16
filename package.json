@@ -5,6 +5,10 @@
   "scripts": {
     "dev": "nodemon --ext ts --exec ts-node ./server/app.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drxlouis/eindprojectdev.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -22,6 +26,7 @@
     "routes": "^2.1.0",
     "vercel": "^43.1.0"
   },
+  "homepage": "https://github.com/drxlouis/eindprojectdev#readme",
   "devDependencies": {
     "@types/express": "^5.0.1",
     "@types/express-ejs-layouts": "^2.5.4",
